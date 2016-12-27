@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26014.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5B531C8D-7B02-4A6C-BD37-753A9DE1AA0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCal", "src\PCal\PCal.csproj", "{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Debug|x64.ActiveCfg = Debug|x64
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Debug|x64.Build.0 = Debug|x64
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Debug|x86.ActiveCfg = Debug|x86
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Debug|x86.Build.0 = Debug|x86
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Release|x64.ActiveCfg = Release|x64
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Release|x64.Build.0 = Release|x64
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Release|x86.ActiveCfg = Release|x86
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DA7303F6-4A55-4B79-880F-B237B0AA3EAD} = {5B531C8D-7B02-4A6C-BD37-753A9DE1AA0E}
+	EndGlobalSection
+EndGlobal
