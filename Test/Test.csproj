@@ -35,6 +35,9 @@
     <Reference Include="Autofac, Version=4.2.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.2.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper">
+      <HintPath>C:\Users\jholt\.nuget\packages\automapper\5.2.0\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions, Version=4.18.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
@@ -49,8 +52,30 @@
       <HintPath>C:\Users\jholt\.nuget\packages\microsoft.aspnetcore.mvc.core\1.1.0\lib\net451\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" />
+    <Reference Include="Ploeh.AutoFixture, Version=3.50.2.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.3.50.2\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Abstractions, Version=3.5.2.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\packages\RavenDB.Tests.Helpers.3.5.2-patch-35181\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight, Version=3.5.2.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\packages\RavenDB.Client.3.5.2-patch-35181\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Database, Version=3.5.2.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\packages\RavenDB.Database.3.5.2-patch-35181\lib\net45\Raven.Database.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Server, Version=3.5.2.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\packages\RavenDB.Tests.Helpers.3.5.2-patch-35181\lib\net45\Raven.Server.exe</HintPath>
+    </Reference>
+    <Reference Include="Raven.Tests.Helpers, Version=3.5.2.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\packages\RavenDB.Tests.Helpers.3.5.2-patch-35181\lib\net45\Raven.Tests.Helpers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -71,8 +96,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseTests.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="FarmProductCoverageTests.cs" />
+    <Compile Include="FarmProductServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestC7.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\PCal\PCal.csproj">
@@ -81,6 +110,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\packages\RavenDB.Database.3.5.2-patch-35181\tools\Raven.Studio.Html5.zip">
+      <Link>Raven.Studio.Html5.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
