@@ -1,6 +1,8 @@
-﻿using PCal.Startup_config;
+﻿using PCal.Services;
+using PCal.Startup_config;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Embedded;
 using Raven.Database.Config;
 using Raven.Tests.Helpers;
 
@@ -14,7 +16,7 @@ namespace Test
         }
 
 
-        protected IDocumentStore NewDocumentStore()
+        protected EmbeddableDocumentStore NewDocumentStore()
         {
             var store= NewDocumentStore(configureStore: c => c.Configuration.Storage.Voron.AllowOn32Bits = true);
 
@@ -25,6 +27,11 @@ namespace Test
 
             return store;
 
+        }
+
+        protected static IFarmProductService GetFarmProductService(IAsyncDocumentSession session)
+        {
+            return new FarmProductService(session);
         }
     }
 }

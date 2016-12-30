@@ -22,15 +22,15 @@ namespace PCal.Startup_config
             var documentStore = new DocumentStore
             {
                 Url = _optionsAccessor.Url,
-                DefaultDatabase = _optionsAccessor.Database,
-                Conventions = new DocumentConvention {IdentityPartsSeparator = "-'"}
+                DefaultDatabase = _optionsAccessor.Database
+                //Conventions = new DocumentConvention {IdentityPartsSeparator = "-'"}
             };
 
             documentStore.Conventions.CustomizeJsonSerializer +=
                 serializer => { serializer.ObjectCreationHandling = ObjectCreationHandling.Auto; };
             documentStore.Initialize();
 
-            assemblies.ForEach(assembly => IndexCreation.CreateIndexes((Assembly) assembly, documentStore));
+            assemblies.ForEach(assembly => IndexCreation.CreateIndexes(assembly, documentStore));
 
             return documentStore;
         }

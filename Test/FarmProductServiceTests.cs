@@ -12,11 +12,6 @@ namespace Test
 {
     public class FarmProductServiceTests : BaseTests
     {
-        private IFarmProductService GetFarmProductService(IAsyncDocumentSession session)
-        {
-            return new FarmProductService(session);
-        }
-
         [Fact]
         public async Task GetFarmProduct_should_load_a_previously_saved_entity()
         {
