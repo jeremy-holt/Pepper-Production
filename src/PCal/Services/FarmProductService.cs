@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
+using PCal.DataTransportWrappers;
 using PCal.Extensions;
 using PCal.Models;
 using Raven.Client;
+using Raven.Client.Linq;
 
 namespace PCal.Services
 {
     public interface IFarmProductService
     {
         Task<FarmProduct> GetFarmProduct(string id);
-        Task<List<FarmProduct>> GetFarmProduct();
-        Task<FarmProductModel> SaveAsync(FarmProduct entity);
-        Task Delete(string id);
+        Task<List<FarmProduct>> GetFarmProductsAsync();
+        Task<SaveModel> SaveAsync(FarmProduct entity);
+        Task<DeleteModel> DeleteAsync(string id);
     }
 
     public class FarmProductService : BaseService, IFarmProductService
@@ -22,14 +24,20 @@ namespace PCal.Services
         {
         }
 
-        public Task Delete(string id)
+        public async Task<DeleteModel> DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            var entity = await Session.LoadAsync<FarmProduct>(id);
+            var ravenId = id.ToRavenId();
+            if (entity == null)
+                throw new InvalidOperationException($"Farm Product Id = {ravenId} does not exist");
+            Session.Delete(entity);
+            return new DeleteModel($"Deleted Farm Product with Id = {ravenId}");
         }
 
-        public Task<List<FarmProduct>> GetFarmProduct()
+        public async Task<List<FarmProduct>> GetFarmProductsAsync()
         {
-            throw new NotImplementedException();
+            var query = await Session.Query<FarmProduct>().Take(1024).OrderBy(c => c.Name).ToListAsync();
+            return query.ToList();
         }
 
         public async Task<FarmProduct> GetFarmProduct(string id)
@@ -37,7 +45,7 @@ namespace PCal.Services
             return await Session.LoadAsync<FarmProduct>(id);
         }
 
-        public async Task<FarmProductModel> SaveAsync(FarmProduct entity)
+        public async Task<SaveModel> SaveAsync(FarmProduct entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
@@ -45,19 +53,7 @@ namespace PCal.Services
 
             await Session.StoreAsync(entity);
             await Session.SaveChangesAsync();
-            return new FarmProductModel(entity, $"{updateMessage} Farm Product with Id = {entity.Id}");
-        }
-    }
-
-    public class FarmProductModel
-    {
-        public IEntity Entity { get; }
-        public string Message { get; }
-
-        public FarmProductModel(IEntity entity, string message)
-        {
-            Entity = entity;
-            Message = message;
+            return new SaveModel(entity, $"{updateMessage} Farm Product with Id = {entity.Id}");
         }
     }
 }

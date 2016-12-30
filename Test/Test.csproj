@@ -97,10 +97,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTests.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="FarmProductCoverageTests.cs" />
     <Compile Include="FarmProductServiceTests.cs" />
+    <Compile Include="FarmProductTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringExtensionTests.cs" />
     <Compile Include="TestC7.cs" />
   </ItemGroup>
   <ItemGroup>

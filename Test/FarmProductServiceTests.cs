@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
+using PCal.DataTransportWrappers;
 using PCal.Models;
 using PCal.Services;
+using Ploeh.AutoFixture;
 using Raven.Client;
 using Xunit;
 
@@ -58,7 +61,7 @@ namespace Test
                     // Assert
                     actual.Name.Should().Be("NPK");
                     actual.CoverageType.Should().Be(CoverageType.GramsPerPlant);
-                    model.Message.Should().Be("Saved Farm Product with Id = FarmProducts/1");
+                    model.Message.Should().Be("Created Farm Product with Id = FarmProducts/1");
                 }
             }
         }
@@ -125,5 +128,57 @@ namespace Test
                 }
             }
         }
-    }
+
+        [Fact]
+        public async Task GetFarmProducts_should_return_list_of_farm_products()
+        {
+            using (var store = NewDocumentStore())
+            {
+                using (var session = store.OpenAsyncSession())
+                {
+                    // Arrange
+                    var fixture = new Fixture();
+                    var products = fixture.CreateMany<FarmProduct>().ToList();
+                    var service = GetFarmProductService(session);
+                    
+                    foreach (var c in products)
+                    {
+                        await service.SaveAsync(c);
+                    }
+
+                    // Act
+                    var list = await service.GetFarmProductsAsync();
+
+                    // Assert
+                    list.Should().HaveCount(3)
+                        .And.BeInAscendingOrder(x => x.Name);
+
+
+                }
+            }
+        }
+
+        [Fact]
+        public async Task Delete_should_delete_a_FarmProduct()
+        {
+            using (var store = NewDocumentStore())
+            {
+                using (var session = store.OpenAsyncSession())
+                {
+                    // Arrange
+                    var fixture = new Fixture();
+                    var product = fixture.Build<FarmProduct>().Without(c=>c.Id).Create();
+                    
+                    var service = GetFarmProductService(session);
+                    await service.SaveAsync(product);
+
+                    // Act
+                    DeleteModel model = await service.DeleteAsync("FarmProducts/1");
+
+                    // Assert
+                    model.Message.Should().Be("Deleted Farm Product with Id = 1");
+                }
+            }
+        }
+     }
 }
