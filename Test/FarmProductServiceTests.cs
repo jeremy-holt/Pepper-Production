@@ -96,5 +96,34 @@ namespace Test
                 }
             }
         }
+
+        [Fact]
+        public async Task SaveAsync_should_only_save_the_entity_once()
+        {
+            using (var store = NewDocumentStore())
+            {
+                using (var session = store.OpenAsyncSession())
+                {
+                    // Arrange
+                    var farmProduct = new FarmProduct("NPK",CoverageType.GramsPerPlant);
+                    var service = GetFarmProductService(session);
+
+                    // Act
+                    farmProduct.Id.Should().BeNullOrEmpty();
+
+                    var model1 = await service.SaveAsync(farmProduct);
+                    model1.Entity.Id.Should().Be("FarmProducts/1");
+                    model1.Message.Should().StartWith("Created");
+
+                    var model2 = await service.SaveAsync(farmProduct);
+                    model2.Entity.Id.Should().Be("FarmProducts/1");
+                    model2.Message.Should().StartWith("Updated");
+
+                    var model3 = await service.SaveAsync(farmProduct);
+                    model3.Entity.Id.Should().Be("FarmProducts/1");
+                    model3.Message.Should().StartWith("Updated");
+                }
+            }
+        }
     }
 }

@@ -41,9 +41,11 @@ namespace PCal.Services
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
+            var updateMessage = entity.Id.IsNullOrEmpty() ? "Created" : "Updated";
+
             await Session.StoreAsync(entity);
             await Session.SaveChangesAsync();
-            return new FarmProductModel(entity, $"Saved Farm Product with Id = {entity.Id}");
+            return new FarmProductModel(entity, $"{updateMessage} Farm Product with Id = {entity.Id}");
         }
     }
 
