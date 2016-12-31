@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using PCal.DataTransportWrappers;
 using PCal.Models;
 using PCal.Services;
 
@@ -30,9 +27,9 @@ namespace PCal.Controllers
         }
 
         [HttpGet]
-        public async Task< IActionResult> Get()
+        public async Task<IActionResult> Get()
         {
-            var data = await _service.GetFarmProductsAsync();
+            var data = await _service.GetAsync();
             return Ok(data);
         }
 
@@ -40,7 +37,7 @@ namespace PCal.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var model = await _service.GetFarmProduct(id);
+            var model = await _service.GetAsync(id);
             return Ok(model);
         }
 
@@ -48,7 +45,7 @@ namespace PCal.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] FarmProduct farmProduct)
         {
-            var data= await _service.SaveAsync(farmProduct);
+            var data = await _service.SaveAsync(farmProduct);
             return Ok(data);
         }
 

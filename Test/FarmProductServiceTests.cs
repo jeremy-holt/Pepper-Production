@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using PCal;
 using PCal.Models;
 using Ploeh.AutoFixture;
 using Xunit;
@@ -32,6 +34,31 @@ namespace Test
             }
         }
 
+        [Fact]
+        public async Task Delete_should_throw_exception_if_id_does_not_exist()
+        {
+            using (var store = NewDocumentStore())
+            {
+                using (var session = store.OpenAsyncSession())
+                {
+                    // Arrange
+                    var service = GetFarmProductService(session);
+
+                    // Act
+                    Func<Task> action = async () =>
+                    {
+                        await service.DeleteAsync("FarmProducts-999");
+                    };
+
+                    // Assert
+                    action.ShouldThrow<EntityNotFoundException>()
+                        .WithMessage("Farm product Id = 999 does not exist");
+
+                    
+                }
+            }
+        }
+
 
         [Fact]
         public async Task GetFarmProduct_should_load_a_previously_saved_entity()
@@ -50,7 +77,7 @@ namespace Test
                 using (var session = store.OpenAsyncSession())
                 {
                     var service = GetFarmProductService(session);
-                    var actual = await service.GetFarmProduct("FarmProducts-1");
+                    var actual = await service.GetAsync("FarmProducts-1");
 
                     // Assert
                     actual.Name.Should().Be("NPK");
@@ -75,7 +102,7 @@ namespace Test
                         await service.SaveAsync(c);
 
                     // Act
-                    var list = await service.GetFarmProductsAsync();
+                    var list = await service.GetAsync();
 
                     // Assert
                     list.Should().HaveCount(3)
@@ -157,7 +184,7 @@ namespace Test
 
                     // Act
                     var service = GetFarmProductService(session);
-                    var actual = await service.GetFarmProduct(FARM_PRODUCTS_ID_1);
+                    var actual = await service.GetAsync(FARM_PRODUCTS_ID_1);
                     actual.Name = "Updated";
                     var model = await service.SaveAsync(actual);
                     model.Entity.Id.Should().Be(FARM_PRODUCTS_ID_1);
@@ -167,7 +194,7 @@ namespace Test
                 {
                     // Assert
                     var service = GetFarmProductService(session);
-                    var actual = await service.GetFarmProduct(FARM_PRODUCTS_ID_1);
+                    var actual = await service.GetAsync(FARM_PRODUCTS_ID_1);
 
                     actual.Name.Should().Be("Updated");
                     actual.Coverages.Should().HaveCount(1);

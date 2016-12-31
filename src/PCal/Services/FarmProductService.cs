@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PCal.DataTransportWrappers;
-using PCal.Extensions;
 using PCal.Models;
+using PCal.Responses;
 using Raven.Client;
 using Raven.Client.Linq;
 
@@ -12,10 +10,10 @@ namespace PCal.Services
 {
     public interface IFarmProductService 
     {
-        Task<FarmProduct> GetFarmProduct(string id);
-        Task<List<FarmProduct>> GetFarmProductsAsync();
-        Task<SaveModel> SaveAsync(FarmProduct entity);
-        Task<DeleteModel> DeleteAsync(string id);
+        Task<FarmProduct> GetAsync(string id);
+        Task<List<FarmProduct>> GetAsync();
+        Task<SaveResponse> SaveAsync(FarmProduct entity);
+        Task<DeleteResponse> DeleteAsync(string id);
     }
 
     public class FarmProductService : BaseService, IFarmProductService 
@@ -24,40 +22,24 @@ namespace PCal.Services
         {
         }
 
-        public async Task<DeleteModel> DeleteAsync(string id)
+        public async Task<DeleteResponse> DeleteAsync(string id)
         {
-            if (id == null) throw new ArgumentNullException(nameof(id));
-
-            var entity = await Session.LoadAsync<FarmProduct>(id);
-            var ravenId = id.ToRavenId();
-
-            if (entity == null)
-                throw new EntityNotFoundException($"Farm Product Id = {ravenId} does not exist");
-            Session.Delete(entity);
-            await Session.SaveChangesAsync();
-
-            return new DeleteModel($"Deleted Farm Product with Id = {ravenId}");
+            return await DeleteAsync<FarmProduct>(id);
         }
 
-   
 
-        public async Task<List<FarmProduct>> GetFarmProductsAsync()
+        public async Task<List<FarmProduct>> GetAsync()
         {
             var query = await Session.Query<FarmProduct>().Take(1024).OrderBy(c => c.Name).ToListAsync();
             return query.ToList();
         }
 
-        public async Task<FarmProduct> GetFarmProduct(string id)
+        public async Task<FarmProduct> GetAsync(string id)
         {
-            var entity = await Session.LoadAsync<FarmProduct>(id);
-
-            CheckEntityWasFound(entity, id);
-
-            return entity;
-
+            return await GetAsync<FarmProduct>(id);
         }
 
-        public async Task<SaveModel> SaveAsync(FarmProduct entity)
+        public async Task<SaveResponse> SaveAsync(FarmProduct entity)
         {
             return await base.SaveAsync(entity);
         }

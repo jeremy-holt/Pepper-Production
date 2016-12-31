@@ -1,8 +1,8 @@
-﻿namespace PCal.DataTransportWrappers
+namespace PCal.Responses
 {
-    public class DeleteModel
+    public class DeleteResponse
     {
-        public DeleteModel(string message)
+        public DeleteResponse(string message)
         {
             Message = message;
         }

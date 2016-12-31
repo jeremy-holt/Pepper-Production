@@ -1,10 +1,10 @@
 using PCal.Models;
 
-namespace PCal.DataTransportWrappers
+namespace PCal.Responses
 {
-    public class SaveModel
+    public class SaveResponse
     {
-        public SaveModel(IEntity entity, string message)
+        public SaveResponse(IEntity entity, string message)
         {
             Entity = entity;
             Message = message;
