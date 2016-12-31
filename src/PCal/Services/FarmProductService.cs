@@ -10,7 +10,7 @@ using Raven.Client.Linq;
 
 namespace PCal.Services
 {
-    public interface IFarmProductService
+    public interface IFarmProductService 
     {
         Task<FarmProduct> GetFarmProduct(string id);
         Task<List<FarmProduct>> GetFarmProductsAsync();
@@ -18,7 +18,7 @@ namespace PCal.Services
         Task<DeleteModel> DeleteAsync(string id);
     }
 
-    public class FarmProductService : BaseService, IFarmProductService
+    public class FarmProductService : BaseService, IFarmProductService 
     {
         public FarmProductService(IAsyncDocumentSession session) : base(session)
         {
@@ -39,6 +39,8 @@ namespace PCal.Services
             return new DeleteModel($"Deleted Farm Product with Id = {ravenId}");
         }
 
+   
+
         public async Task<List<FarmProduct>> GetFarmProductsAsync()
         {
             var query = await Session.Query<FarmProduct>().Take(1024).OrderBy(c => c.Name).ToListAsync();
@@ -47,22 +49,19 @@ namespace PCal.Services
 
         public async Task<FarmProduct> GetFarmProduct(string id)
         {
-            var result = await Session.LoadAsync<FarmProduct>(id);
-            if (result == null)
-                throw new EntityNotFoundException($"Farm Product with ID = {id} not found");
+            var entity = await Session.LoadAsync<FarmProduct>(id);
 
-            return result;
+            CheckEntityWasFound(entity, id);
+
+            return entity;
+
         }
 
         public async Task<SaveModel> SaveAsync(FarmProduct entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
-
-            var updateMessage = entity.Id.IsNullOrEmpty() ? "Created" : "Updated";
-
-            await Session.StoreAsync(entity);
-            await Session.SaveChangesAsync();
-            return new SaveModel(entity, $"{updateMessage} Farm Product with Id = {entity.Id}");
+            return await base.SaveAsync(entity);
         }
+
+      
     }
 }

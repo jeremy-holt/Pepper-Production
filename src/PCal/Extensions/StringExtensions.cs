@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace PCal.Extensions
 {
@@ -16,6 +17,8 @@ namespace PCal.Extensions
 
         public static string ToRavenId(this string id)
         {
+            if (id == null) throw new ArgumentNullException(nameof(id));
+
             var pos = id.LastIndexOf("-", StringComparison.Ordinal) + 1;
 
 
@@ -23,6 +26,11 @@ namespace PCal.Extensions
                 throw new InvalidOperationException($"Unable to extract id number from {id}");
 
             return id.Substring(pos);
+        }
+
+        public static string CamelCaseToSpaces(this string value)
+        {
+            return Regex.Replace(value, "(?!^)([A-Z])", " $1");
         }
     }
 }

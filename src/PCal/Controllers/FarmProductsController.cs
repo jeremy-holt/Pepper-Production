@@ -30,9 +30,10 @@ namespace PCal.Controllers
         }
 
         [HttpGet]
-        public async Task<List<FarmProduct>> Get()
+        public async Task< IActionResult> Get()
         {
-            return await _service.GetFarmProductsAsync();
+            var data = await _service.GetFarmProductsAsync();
+            return Ok(data);
         }
 
         // GET api/farmProducts/5
@@ -45,9 +46,10 @@ namespace PCal.Controllers
 
         // POST api/farmProducts
         [HttpPost]
-        public async Task<SaveModel> Post([FromBody] FarmProduct farmProduct)
+        public async Task<IActionResult> Post([FromBody] FarmProduct farmProduct)
         {
-            return await _service.SaveAsync(farmProduct);
+            var data= await _service.SaveAsync(farmProduct);
+            return Ok(data);
         }
 
         // PUT api/farmProducts/5
@@ -58,9 +60,10 @@ namespace PCal.Controllers
 
         // DELETE api/farmProducts/5
         [HttpDelete("{id}")]
-        public async Task<DeleteModel> Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            return await _service.DeleteAsync(id);
+            var data = await _service.DeleteAsync(id);
+            return Ok(data);
         }
     }
 }
