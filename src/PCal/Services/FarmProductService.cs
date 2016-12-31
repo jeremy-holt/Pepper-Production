@@ -26,11 +26,16 @@ namespace PCal.Services
 
         public async Task<DeleteModel> DeleteAsync(string id)
         {
+            if (id == null) throw new ArgumentNullException(nameof(id));
+
             var entity = await Session.LoadAsync<FarmProduct>(id);
             var ravenId = id.ToRavenId();
+
             if (entity == null)
-                throw new InvalidOperationException($"Farm Product Id = {ravenId} does not exist");
+                throw new EntityNotFoundException($"Farm Product Id = {ravenId} does not exist");
             Session.Delete(entity);
+            await Session.SaveChangesAsync();
+
             return new DeleteModel($"Deleted Farm Product with Id = {ravenId}");
         }
 
@@ -42,7 +47,11 @@ namespace PCal.Services
 
         public async Task<FarmProduct> GetFarmProduct(string id)
         {
-            return await Session.LoadAsync<FarmProduct>(id);
+            var result = await Session.LoadAsync<FarmProduct>(id);
+            if (result == null)
+                throw new EntityNotFoundException($"Farm Product with ID = {id} not found");
+
+            return result;
         }
 
         public async Task<SaveModel> SaveAsync(FarmProduct entity)

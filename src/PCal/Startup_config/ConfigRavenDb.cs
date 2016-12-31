@@ -22,8 +22,8 @@ namespace PCal.Startup_config
             var documentStore = new DocumentStore
             {
                 Url = _optionsAccessor.Url,
-                DefaultDatabase = _optionsAccessor.Database
-                //Conventions = new DocumentConvention {IdentityPartsSeparator = "-'"}
+                DefaultDatabase = _optionsAccessor.Database,
+                Conventions = new DocumentConvention {IdentityPartsSeparator = "-"}
             };
 
             documentStore.Conventions.CustomizeJsonSerializer +=

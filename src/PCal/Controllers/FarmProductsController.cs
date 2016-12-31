@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace PCal.Controllers
         private readonly IFarmProductService _service;
         // GET api/farmProducts
         public FarmProductsController(IFarmProductService service)
-        {            
+        {
             _service = service;
             Init();
         }
@@ -24,7 +25,7 @@ namespace PCal.Controllers
             farmProduct.AddCoverage(1, 15);
             farmProduct.AddCoverage(2, 10);
             farmProduct.AddCoverage(3, 10);
-                
+
             _service.SaveAsync(farmProduct).Wait();
         }
 
@@ -36,9 +37,10 @@ namespace PCal.Controllers
 
         // GET api/farmProducts/5
         [HttpGet("{id}")]
-        public async Task<FarmProduct> Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
-            return await _service.GetFarmProduct(id);
+            var model = await _service.GetFarmProduct(id);
+            return Ok(model);
         }
 
         // POST api/farmProducts
