@@ -1,0 +1,13 @@
+<template>
+  <h1>Farm inputs</h1>
+
+  <table>
+   <tbody>
+     <tr repeat.for="item of farmProducts">
+       <td>${item.id}</td>
+       <td>${item.name}</td>
+       <td>${item.coverageText}</td>
+     </tr>
+   </tbody>
+  </table>
+</template>
