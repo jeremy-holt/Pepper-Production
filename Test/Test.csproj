@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,7 +51,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\jholt\.nuget\packages\microsoft.aspnetcore.mvc.core\1.1.0\lib\net451\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" />
     <Reference Include="Ploeh.AutoFixture, Version=3.50.2.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoFixture.3.50.2\lib\net40\Ploeh.AutoFixture.dll</HintPath>
     </Reference>
@@ -105,18 +104,18 @@
     <Compile Include="TestC7.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\PCal\PCal.csproj">
-      <Project>{da7303f6-4a55-4b79-880f-b237b0aa3ead}</Project>
-      <Name>PCal</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\packages\RavenDB.Database.3.5.2-patch-35181\tools\Raven.Studio.Html5.zip">
       <Link>Raven.Studio.Html5.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\PCal\PCal.csproj">
+      <Project>{da7303f6-4a55-4b79-880f-b237b0aa3ead}</Project>
+      <Name>PCal</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
