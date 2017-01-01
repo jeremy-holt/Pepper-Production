@@ -26,7 +26,7 @@ define('environment',["require", "exports"], function (require, exports) {
     };
 });
 
-define('main',["require", "exports", "./environment"], function (require, exports, environment_1) {
+define('main',["require", "exports", "./environment", "aurelia-fetch-client"], function (require, exports, environment_1, aurelia_fetch_client_1) {
     "use strict";
     Promise.config({
         longStackTraces: environment_1.default.debug,
@@ -37,12 +37,36 @@ define('main',["require", "exports", "./environment"], function (require, export
     function configure(aurelia) {
         aurelia.use
             .standardConfiguration()
-            .feature('resources');
+            .feature("resources");
+        var container = aurelia.container;
+        var http = new aurelia_fetch_client_1.HttpClient();
+        http.configure(function (config) {
+            config
+                .useStandardConfiguration()
+                .withBaseUrl("api/")
+                .withDefaults({
+                credentials: "same-origin",
+                headers: {
+                    'X-Requested-With': "Fetch"
+                }
+            })
+                .withInterceptor({
+                request: function (request) {
+                    console.log("Requesting " + request.method + " " + request.url);
+                    return request;
+                },
+                response: function (response) {
+                    console.log("Received " + response.status + " " + response.url);
+                    return response;
+                }
+            });
+        });
+        container.registerInstance(aurelia_fetch_client_1.HttpClient, http);
         if (environment_1.default.debug) {
             aurelia.use.developmentLogging();
         }
         if (environment_1.default.testing) {
-            aurelia.use.plugin('aurelia-testing');
+            aurelia.use.plugin("aurelia-testing");
         }
         aurelia.start().then(function () { return aurelia.setRoot(); });
     }
@@ -76,34 +100,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define('components/dictionary/farm-inputs-main',["require", "exports", "aurelia-framework", "aurelia-fetch-client"], function (require, exports, aurelia_framework_1, aurelia_fetch_client_1) {
+define('components/dictionary/farm-inputs-main',["require", "exports", "aurelia-framework", "../../services/FarmProductsService"], function (require, exports, aurelia_framework_1, FarmProductsService_1) {
     "use strict";
     var FarmInputsMain = (function () {
-        function FarmInputsMain() {
+        function FarmInputsMain(service) {
+            this.service = service;
+        }
+        FarmInputsMain.prototype.activate = function () {
             var _this = this;
-            var httpClient = new aurelia_fetch_client_1.HttpClient();
-            httpClient.configure(function (config) {
-                config.useStandardConfiguration()
-                    .withBaseUrl("api/")
-                    .withDefaults({
-                    credentials: 'same-origin',
-                    headers: {
-                        'X-Requested-With': 'Fetch'
-                    }
-                });
-            });
-            httpClient.fetch("farmProducts")
-                .then(function (response) { return response.json(); })
+            return this.service.getFarmProductsList()
                 .then(function (data) {
                 _this.farmProducts = data;
                 console.log(_this.farmProducts);
             });
-        }
+        };
         return FarmInputsMain;
     }());
     FarmInputsMain = __decorate([
-        aurelia_framework_1.inject(aurelia_fetch_client_1.HttpClient),
-        __metadata("design:paramtypes", [])
+        aurelia_framework_1.inject(FarmProductsService_1.FarmProductsService),
+        __metadata("design:paramtypes", [FarmProductsService_1.FarmProductsService])
     ], FarmInputsMain);
     exports.FarmInputsMain = FarmInputsMain;
 });
@@ -140,6 +155,41 @@ define('resources/elements/nav-menu',["require", "exports", "aurelia-framework"]
         __metadata("design:type", Object)
     ], NavMenu.prototype, "router", void 0);
     exports.NavMenu = NavMenu;
+});
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+define('services/FarmProductsService',["require", "exports", "aurelia-framework", "aurelia-fetch-client"], function (require, exports, aurelia_framework_1, aurelia_fetch_client_1) {
+    "use strict";
+    var FarmProductsService = (function () {
+        function FarmProductsService(httpClient) {
+            this.httpClient = httpClient;
+        }
+        FarmProductsService.prototype.getFarmProductsList = function () {
+            return this.httpClient.fetch("farmProducts")
+                .then(function (response) { return response.json(); }, function (response) { return response.text(); })
+                .then(function (data) {
+                for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+                    var item = data_1[_i];
+                    item.coverageText = ".   bbbb " + item.coverageText;
+                }
+                return data;
+            });
+        };
+        return FarmProductsService;
+    }());
+    FarmProductsService = __decorate([
+        aurelia_framework_1.inject(aurelia_fetch_client_1.HttpClient),
+        __metadata("design:paramtypes", [aurelia_fetch_client_1.HttpClient])
+    ], FarmProductsService);
+    exports.FarmProductsService = FarmProductsService;
 });
 
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from='bootstrap/css/bootstrap.css'></require>\n  <require from='./styles.css'></require>\n\n  <nav-menu router.bind=\"router\"></nav-menu>\n\n  <div class=\"container\">\n    <router-view></router-view>\n  </div>\n\n</template>\n"; });

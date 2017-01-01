@@ -7,7 +7,7 @@
     <TargetFramework>net452</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
-	<typescriptcompileblocked>true</typescriptcompileblocked>
+    <typescriptcompileblocked>true</typescriptcompileblocked>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="DataTransportWrappers\" />

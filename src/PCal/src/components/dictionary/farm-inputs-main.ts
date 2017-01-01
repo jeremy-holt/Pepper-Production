@@ -1,30 +1,23 @@
 import { inject } from "aurelia-framework";
-import { HttpClient, json } from "aurelia-fetch-client";
+import {FarmProductsService} from "../../services/FarmProductsService";
 
-@inject(HttpClient)
+
+@inject(FarmProductsService)
 export class FarmInputsMain {
 
-  farmProducts: Array<any>;
+    farmProducts: Array<any>;
 
-  constructor() {
-    let httpClient = new HttpClient();
-    httpClient.configure(config => {
-      config.useStandardConfiguration()
-        .withBaseUrl("api/")
-        .withDefaults({
-          credentials: 'same-origin',
-          headers: {
-            'X-Requested-With': 'Fetch'
-          }
-        })
-    });
+    constructor(private service: FarmProductsService) {
 
-    httpClient.fetch("farmProducts")
-      .then(response => response.json())
-      .then(data => {
-        this.farmProducts = data;
-        console.log(this.farmProducts);
-      });
+    }
 
-  }
+    activate() {
+        return this.service.getFarmProductsList()
+            .then(data => {
+                this.farmProducts = data;
+                console.log(this.farmProducts);
+            });
+    }
+
+    
 }
