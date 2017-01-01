@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PCal.Models;
 using PCal.Services;
@@ -27,6 +28,7 @@ namespace PCal.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy="DisneyUser")]
         public async Task<IActionResult> Get()
         {
             var data = await _service.GetAsync();
