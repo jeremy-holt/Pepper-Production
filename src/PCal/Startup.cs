@@ -116,6 +116,15 @@ namespace PCal
             logger.AddConsole(Configuration.GetSection("Logging"));
             logger.AddDebug();
 
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();           
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
             var log = logger.CreateLogger<Startup>();
             if (_exceptions.Any(c => c.Value.Any()))
             {
@@ -160,8 +169,13 @@ namespace PCal
                             });
                     });
 
-                app.UseDefaultFiles();
+                //app.UseDefaultFiles();
                 app.UseStaticFiles();
+                app.UseFileServer(new FileServerOptions
+                {
+                    EnableDefaultFiles = true,
+                    EnableDirectoryBrowsing = false
+                });
 
                 app.UseMvc();
 
@@ -179,31 +193,6 @@ namespace PCal
                        await context.Response.WriteAsync(e.StackTrace).ConfigureAwait(false);
                    }); 
             }
-
-            //app.UseExceptionHandler(errorApp =>
-            //{
-            //    errorApp.Run(async context =>
-            //    {
-            //        context.Response.StatusCode = 500; // or another Status accordingly to Exception Type
-            //        context.Response.ContentType = "application/json";
-
-            //        var error = context.Features.Get<IExceptionHandlerFeature>();
-            //        if (error != null)
-            //        {
-            //            var ex = error.Error;
-
-            //            await context.Response.WriteAsync(new ErrorDto()
-            //            {
-            //                Code = < your custom code based on Exception Type >,
-            //                Message = ex.Message // or your custom message
-            //                // other custom data
-            //            }.ToString(), Encoding.UTF8);
-            //        }
-            //    });
-            //});
-            //app.UseDefaultFiles();
-            //app.UseStaticFiles();
-           
         }
     }
 

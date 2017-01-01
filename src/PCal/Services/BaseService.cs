@@ -22,7 +22,7 @@ namespace PCal.Services
             await Session.StoreAsync(entity);
             await Session.SaveChangesAsync();
             
-            var message = $"{updateMessage} {entity.GetType().Name.CamelCaseToSpaces()} with Id = {entity.Id}";
+            var message = $"{updateMessage} {entity.GetType().Name.CamelCaseToSpaces()} with Id:{entity.Id.ToRavenId()}";
 
             return new SaveResponse(entity, message);
         }
@@ -37,7 +37,7 @@ namespace PCal.Services
             }
 
             var entityName = typeof(T).Name.CamelCaseToSpaces();            
-            var message = $"{entityName} with Id = {id} not found";
+            var message = $"{entityName} with Id:{id.ToRavenId()} not found";
 
             throw new EntityNotFoundException(message);
         }
@@ -51,12 +51,12 @@ namespace PCal.Services
             var entity = await Session.LoadAsync<T>(id);
 
             if (entity == null)
-                throw new EntityNotFoundException($"Farm Product Id = {ravenId} does not exist");
+                throw new EntityNotFoundException($"Farm Product Id:{ravenId} does not exist");
 
             Session.Delete(entity);
             await Session.SaveChangesAsync();
 
-            return new DeleteResponse($"Deleted Farm Product with Id = {ravenId}");
+            return new DeleteResponse($"Deleted Farm Product with Id:{ravenId}");
         }
     }
 }

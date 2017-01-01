@@ -29,7 +29,7 @@ namespace Test
                     var model = await service.DeleteAsync("FarmProducts-1");
 
                     // Assert
-                    model.Message.Should().Be("Deleted Farm Product with Id = 1");
+                    model.Message.Should().Be("Deleted Farm Product with Id:1");
                 }
             }
         }
@@ -52,7 +52,7 @@ namespace Test
 
                     // Assert
                     action.ShouldThrow<EntityNotFoundException>()
-                        .WithMessage("Farm product Id = 999 does not exist");
+                        .WithMessage("Farm product Id:999 does not exist");
 
                     
                 }
@@ -82,6 +82,25 @@ namespace Test
                     // Assert
                     actual.Name.Should().Be("NPK");
                     actual.CoverageType.Should().Be(CoverageType.LitresPerHectare);
+                }
+            }
+        }
+
+        [Fact]
+        public async Task GetFarmProduct_should_return_not_found_error_message()
+        {
+            using (var store = NewDocumentStore())
+            {
+                using (var session = store.OpenAsyncSession())
+                {
+                    // Arrange
+                    var service = GetFarmProductService(session);
+
+                    // Act
+                    Func<Task> action = async ()=>await service.GetAsync("FarmProducts-999");
+
+                    // Assert
+                    action.ShouldThrow<EntityNotFoundException>().WithMessage("Farm Product with Id:999 not found");
                 }
             }
         }
@@ -156,12 +175,12 @@ namespace Test
 
                     // Act
                     var model = await sut.SaveAsync(farmProduct);
-                    var actual = await session.LoadAsync<FarmProduct>(FARM_PRODUCTS_ID_1);
 
                     // Assert
+                    var actual = await session.LoadAsync<FarmProduct>(FARM_PRODUCTS_ID_1);
                     actual.Name.Should().Be("NPK");
                     actual.CoverageType.Should().Be(CoverageType.GramsPerPlant);
-                    model.Message.Should().Be("Created Farm Product with Id = FarmProducts-1");
+                    model.Message.Should().Be("Created Farm Product with Id:1");
                 }
             }
         }
