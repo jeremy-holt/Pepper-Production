@@ -28,7 +28,8 @@ namespace PCal.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy="DisneyUser")]
+        //[Authorize(Policy="DisneyUser")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             var data = await _service.GetAsync();
